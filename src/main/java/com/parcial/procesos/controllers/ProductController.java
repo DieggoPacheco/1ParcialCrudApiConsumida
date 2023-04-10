@@ -25,6 +25,7 @@ public class ProductController {
         Product[] productosExternos = restTemplate.getForObject("https://fakestoreapi.com/products", Product[].class);
         List<Product> productosLocales = new ArrayList<>();
         for (Product productoExterno : productosExternos) {
+
             Product productoLocal = new Product();
             productoLocal.setTitle(productoExterno.getTitle());
             productoLocal.setCategory(productoExterno.getCategory());
