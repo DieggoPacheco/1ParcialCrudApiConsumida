@@ -17,4 +17,6 @@ public class Product {
     private String description;
     private String image;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Rating rating;
 }

@@ -32,6 +32,8 @@ public class ProductController {
             productoLocal.setPrice(productoExterno.getPrice());
             productoLocal.setDescription(productoExterno.getDescription());
             productoLocal.setImage(productoExterno.getImage());
+            productoLocal.setRating(productoExterno.getRating());
+
             productosLocales.add(productService.createProduct(productoLocal));
         }
         return productosLocales;
