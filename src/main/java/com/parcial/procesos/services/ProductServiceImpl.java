@@ -4,7 +4,9 @@ import com.parcial.procesos.models.Product;
 import com.parcial.procesos.repositorys.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -12,6 +14,25 @@ public class ProductServiceImpl implements ProductService{
 
     @Autowired
     private ProductRepository productRepository;
+
+    public List<Product> createAllProducts(){
+        RestTemplate restTemplate = new RestTemplate();
+        Product[] productosExternos = restTemplate.getForObject("https://fakestoreapi.com/products", Product[].class);
+        List<Product> productosLocales = new ArrayList<>();
+        for (Product productoExterno : productosExternos) {
+
+            Product productoLocal = new Product();
+            productoLocal.setTitle(productoExterno.getTitle());
+            productoLocal.setCategory(productoExterno.getCategory());
+            productoLocal.setPrice(productoExterno.getPrice());
+            productoLocal.setDescription(productoExterno.getDescription());
+            productoLocal.setImage(productoExterno.getImage());
+            productoLocal.setRating(productoExterno.getRating());
+
+            productosLocales.add(productRepository.save(productoLocal));
+        }
+        return productosLocales;
+    }
 
     public Product createProduct(Product product){
         return productRepository.save(product);

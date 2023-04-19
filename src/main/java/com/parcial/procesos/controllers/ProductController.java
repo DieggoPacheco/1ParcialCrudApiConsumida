@@ -20,23 +20,18 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/products")
-    public List<Product> createAllProducts() {
-        RestTemplate restTemplate = new RestTemplate();
-        Product[] productosExternos = restTemplate.getForObject("https://fakestoreapi.com/products", Product[].class);
-        List<Product> productosLocales = new ArrayList<>();
-        for (Product productoExterno : productosExternos) {
-
-            Product productoLocal = new Product();
-            productoLocal.setTitle(productoExterno.getTitle());
-            productoLocal.setCategory(productoExterno.getCategory());
-            productoLocal.setPrice(productoExterno.getPrice());
-            productoLocal.setDescription(productoExterno.getDescription());
-            productoLocal.setImage(productoExterno.getImage());
-            productoLocal.setRating(productoExterno.getRating());
-
-            productosLocales.add(productService.createProduct(productoLocal));
+    public ResponseEntity createAllProducts() {
+        Map response = new HashMap();
+        try{
+            response.put("message","Producto consimidos correctamente en la BD");
+            response.put("data",productService.createAllProducts());
+            return new ResponseEntity(response, HttpStatus.CREATED);
+        }catch (Exception e){
+            response.put("message","Error al consumir los producto");
+            response.put("data",e.getMessage());
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
-        return productosLocales;
+
     }
 
     @GetMapping(value = "/products")
